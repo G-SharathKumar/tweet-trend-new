@@ -1,4 +1,4 @@
-pipeline {
+pipeline {
     agent {
         node {
             label 'maven'
@@ -15,4 +15,3 @@ environment {
         }
     }
 }
-
