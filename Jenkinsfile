@@ -23,9 +23,12 @@ environment {
             steps{
                 script {
                     try {
-                        echo "----------- unit test started ----------"
+                        timeout(time: 30, unit: 'SECONDS'){
+                            echo "----------- unit test started ----------"
                         sh 'mvn surefire-report:report'
                         echo "----------- unit test Complted ----------"
+                        }
+                        
                     } catch (err) {
                         // Handle failure without aborting the pipeline
                         echo "⚠ unit tests analysis skipped or failed: ${err}"
