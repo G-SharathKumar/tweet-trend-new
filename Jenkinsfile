@@ -24,11 +24,11 @@ environment {
                         echo "----------- unit test started ----------"
                         sh 'mvn surefire-report:report'
                         echo "----------- unit test Complted ----------"
-                    }
                     } catch (err) {
                         // Handle failure without aborting the pipeline
                         echo "⚠ unit tests analysis skipped or failed: ${err}"
                     }
+                    } 
             }
         }
         stage('SonarQube analysis') {
