@@ -77,8 +77,8 @@ environment {
         }
 
         stage("Jar Publish") {
-        steps {
-            script {
+            steps {
+                script {
                     echo '<--------------- Jar Publish Started --------------->'
                      def server = Artifactory.newServer url:registry+"/artifactory" ,  credentialsId:"artifact-cred"
                      def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}";
@@ -102,25 +102,31 @@ environment {
         }   
     }
         stage(" Docker Build ") {
-        steps {
-            script {
-                echo '<--------------- Docker Build Started --------------->'
-                app = docker.build(imageName+":"+version)
-                echo '<--------------- Docker Build Ends --------------->'
+            steps {
+                script {
+                    echo '<--------------- Docker Build Started --------------->'
+                    app = docker.build(imageName+":"+version)
+                    echo '<--------------- Docker Build Ends --------------->'
         }
       }
     }
 
         stage (" Docker Publish ") {
-        steps {
-            script {
-                echo '<--------------- Docker Publish Started --------------->'  
-                docker.withRegistry(registry, 'artifact-cred') {
-                app.push()
-                }    
-               echo '<--------------- Docker Publish Ended --------------->'  
+            steps {
+                script {
+                    echo '<--------------- Docker Publish Started --------------->'  
+                    docker.withRegistry(registry, 'artifact-cred') { app.push() }    
+                    echo '<--------------- Docker Publish Ended --------------->'  
             }
         }
     }
+        stage ("Deploy") {
+            steps {
+                script { 
+                    sh './deploy.sh'
+                }
+            }
+
+        }
     }
 }
