@@ -42,6 +42,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 script {
+                    echo "----------- SonarQube analysis started ----------"
                     try {
                         timeout(time: 30, unit: 'SECONDS') {
                             def scannerHome = tool 'valaxyy-sonar-scanner'
@@ -53,6 +54,7 @@ pipeline {
                         // Handle failure without aborting the pipeline
                         echo "⚠ SonarQube analysis skipped or failed: ${err}"
                     }
+                    echo "----------- SonarQube analysis ended ----------"
                 }
             }
         }
@@ -60,6 +62,7 @@ pipeline {
         stage("Quality Gate") {
             steps {
                 script {
+                    echo "----------- Quality Gate started ----------"
                     try {
                         if (!fileExists('.scannerwork/report-task.txt')) {
                             echo "⚠ Sonar report not found. Skipping Quality Gate."
@@ -75,6 +78,7 @@ pipeline {
                     } catch (err) {
                         echo "⚠ Quality Gate skipped or failed: ${err}"
                     }
+                    echo "----------- Quality Gate ended ----------"
                 }
             }
         }
